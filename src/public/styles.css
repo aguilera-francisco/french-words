@@ -1,0 +1,19 @@
+body {
+    background-color: #2596be !important;
+    color: white;
+}
+.container {
+    margin: "0 auto";
+    max-width: 400px !important;
+    text-align: center;
+    margin-bottom: 5px;
+}
+#input {
+    margin-bottom: 5px;
+}
+#panel {
+    color: black;
+}
+.button {
+    margin: 10px;
+}
