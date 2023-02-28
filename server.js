@@ -37,7 +37,7 @@ app.get("/word/:word", async (req, res) => {
         res.send(err);
     }
 });
-
-app.listen(8000, () => {
-    console.log("Servidor funcionando");
+const PORT = 8000;
+app.listen(PORT, () => {
+    console.log(`Servidor funcionando en puerto: ${PORT}`);
 });
