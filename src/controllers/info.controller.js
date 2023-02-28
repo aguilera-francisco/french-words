@@ -1,5 +1,6 @@
 const { wordHasAccent, refactorWord } = require("./info.helper");
 const wr = require("wordreference-api");
+const { translateType } = require("../services/info.services");
 
 function findGender(word, translations) {
     for (trans of translations) {
@@ -36,7 +37,12 @@ function getAllMeanings(word, translations) {
 }
 function deleteDuplicated(array) {
     const filteredArray = array.filter((obj, index, self) => {
-        return index === self.findIndex((t) => t.meaning === obj.meaning);
+        return (
+            index ===
+            self.findIndex(
+                (t) => t.meaning === obj.meaning && t.type === obj.type
+            )
+        );
     });
     return filteredArray;
 }
@@ -80,6 +86,7 @@ async function httpGetWord(req, res) {
         //añadir al result
         result.meanings = meanings;
         result.ok = true;
+        result = translateType(result);
         res.send({
             result,
         });

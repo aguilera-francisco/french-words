@@ -1,6 +1,12 @@
 body {
-    background-color: #2596be !important;
+    /* background-color: #2596be !important;*/
+    background-color: #28036a !important;
     color: white;
+    padding-top: 5%;
+    /* display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; */
 }
 .container {
     margin: "0 auto";
@@ -8,12 +14,15 @@ body {
     text-align: center;
     margin-bottom: 5px;
 }
-#input {
+/* #input {
     margin-bottom: 5px;
-}
+} */
 #panel {
+    margin-top: 5px;
     color: black;
+    padding: 20px;
+    padding-top: 10px;
 }
-.button {
+/* .button {
     margin: 10px;
-}
+} */

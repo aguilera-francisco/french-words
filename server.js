@@ -16,16 +16,6 @@ const app = express();
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "src", "public")));
 app.get("/", (req, res) => {
-    //wr("carro").then((result) => res.send(result));
-    //wr("the", "es", "fr").then((result) => res.send(result));
-
-    // api.getTranslation("en", "es", "cat")
-    //     .then((result) => {
-    //         console.log(result);
-    //     })
-    //     .catch((err) => {
-    //         console.error(err);
-    //     });
     res.sendFile(path.join(__dirname, "src", "public", "index.html"));
 });
 app.use("/info", InfoRouter);

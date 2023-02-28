@@ -15,24 +15,35 @@
     </head>
     <body>
         <div class="container text-align-center">
-            <h1>INFO</h1>
-            <hr />
-            <h3>Buscar:</h3>
-            <span>
+            <br />
+            <h2>Buscar:</h2>
+            <br />
+            <div id="div-input" class="input-group">
                 <input
                     id="input"
                     type="text"
                     placeholder="Ingresa una palabra"
                     class="form-control"
                 />
-                <button id="btnEliminar" class="btn btn-danger">
-                    Eliminar
-                </button>
-                <button id="btnBuscar" class="btn btn-success button">
-                    Buscar
-                </button>
-                <script src="./script.js"></script>
-            </span>
+                <div class="input-group-append">
+                    <button
+                        type="button"
+                        id="btnEliminar"
+                        class="btn btn-danger"
+                    >
+                        Eliminar
+                    </button>
+                    <button
+                        type="button"
+                        id="btnBuscar"
+                        class="btn btn-success"
+                    >
+                        Buscar
+                    </button>
+                </div>
+            </div>
+
+            <script src="./script.js"></script>
             <div id="panel" class=""></div>
         </div>
     </body>
