@@ -1,5 +1,7 @@
+const { getWord } = require("../controllers/info.controller");
 const btnBuscar = document.getElementById("btnBuscar");
 const btnEliminar = document.getElementById("btnEliminar");
+
 btnEliminar.style.display = "none";
 const input = document.getElementById("input");
 const URL = "http://localhost:8000/info";
@@ -13,9 +15,11 @@ function buildMeanings(meanings) {
 async function click() {
     const word = document.getElementById("input").value;
     if (word != "") {
-        const response = await fetch(`${URL}/${word}`);
-        const result = await response.json();
-        const card = result.result;
+        //const response = await fetch(`${URL}/${word}`);
+        //const result = await response.json();
+        const card = await getWord(word);
+        //const card = result.result;
+
         console.log(card);
         const txtHtml = buildMeanings(card.meanings);
         const panel = document.getElementById("panel");
