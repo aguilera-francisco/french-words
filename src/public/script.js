@@ -2,7 +2,7 @@ const btnBuscar = document.getElementById("btnBuscar");
 const btnEliminar = document.getElementById("btnEliminar");
 btnEliminar.style.display = "none";
 const input = document.getElementById("input");
-const URL = "http://localhost:8000/info";
+const URL = "http://localhost:443/info";
 function buildMeanings(meanings) {
     let textHtml = "";
     for (meaning of meanings) {
