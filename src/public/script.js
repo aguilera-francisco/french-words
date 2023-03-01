@@ -4,7 +4,7 @@ const btnEliminar = document.getElementById("btnEliminar");
 
 btnEliminar.style.display = "none";
 const input = document.getElementById("input");
-const URL = `http://localhost:3000/info`;
+const URL = `http://localhost:10000/info`;
 function buildMeanings(meanings) {
     let textHtml = "";
     for (meaning of meanings) {
