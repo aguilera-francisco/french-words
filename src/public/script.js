@@ -14,12 +14,13 @@ function buildMeanings(meanings) {
     return textHtml;
 }
 async function click() {
-    const word = document.getElementById("input").value;
+    const word = document.getElementById("input").value.toLowerCase();
     if (word != "") {
         console.log("antes del fetch");
         const response = await fetch(`${URL}/${word}`);
         console.log(response);
         const result = await response.json();
+        console.log(result);
         //const card = await getWord(word);
         const card = result.result;
 
