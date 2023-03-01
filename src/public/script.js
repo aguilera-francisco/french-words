@@ -76,8 +76,9 @@ btnEliminar.addEventListener("click", () => {
 input.addEventListener("keydown", (event) => {
     const panel = document.getElementById("panel");
     panel.classList.add("card");
-    panel.innerHTML = `<p>${event.code}</p>`;
+    panel.innerHTML = `<p>${event.key}</p>`;
     if (event.code === "Enter") {
         click();
     }
 });
+//evento cuando el texto del input esté vacío
