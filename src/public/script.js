@@ -4,7 +4,8 @@ const btnEliminar = document.getElementById("btnEliminar");
 
 btnEliminar.style.display = "none";
 const input = document.getElementById("input");
-const URL = `http://localhost:10000/info`;
+const URL = `https://localhost:10000/info`;
+//const URL = `https://french-words.onrender.com/info`;
 function buildMeanings(meanings) {
     let textHtml = "";
     for (meaning of meanings) {
@@ -15,7 +16,9 @@ function buildMeanings(meanings) {
 async function click() {
     const word = document.getElementById("input").value;
     if (word != "") {
+        console.log("antes del fetch");
         const response = await fetch(`${URL}/${word}`);
+        console.log(response);
         const result = await response.json();
         //const card = await getWord(word);
         const card = result.result;
