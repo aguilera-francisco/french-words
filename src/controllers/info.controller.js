@@ -98,58 +98,7 @@ async function httpGetWord(req, res) {
         });
     }
 }
-async function getWord(_word) {
-    let word = _word;
-    if (wordHasAccent(word)) {
-        word = refactorWord(word);
-    }
-    try {
-        const data = await wr(word, "fr", "es");
-        word = _word;
-        if (!data.translations) {
-            throw {
-                error: "no hay traducciones",
-            };
-        }
-        let result = {};
-        let meanings = [];
-        //console.log(data.translations);
-        for (translation of data.translations) {
-            if (translation.title !== "Principales traductions") {
-                continue;
-            }
-            //buscar el género
-            const gender = findGender(word, translation.translations);
-            if (!gender) {
-                ("entró al if");
-                continue;
-            } else {
-                result = gender;
-                break;
-            }
-        }
-        if (!result.word) {
-            throw error;
-        }
-        //sacar todos los resultados
-        meanings = getAllMeanings(word, data.translations);
-        meanings = deleteDuplicated(meanings);
-        //añadir al result
-        result.meanings = meanings;
-        result.ok = true;
-        result = translateType(result);
-        return {
-            result,
-        };
-    } catch (error) {
-        return {
-            error,
-            ok: false,
-            //data,
-        };
-    }
-}
+
 module.exports = {
     httpGetWord,
-    getWord,
 };

@@ -17,6 +17,9 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "src", "public", "index.html"));
 });
 app.use("/info", InfoRouter);
+app.get("/code/:code", async (req, res) => {
+    console.log(req.params.code);
+});
 app.get("/word/:word", async (req, res) => {
     //explorar los diferentes significados
     let word = req.params.word;
