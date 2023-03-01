@@ -56,6 +56,9 @@ btnEliminar.addEventListener("click", () => {
     btnEliminar.style.display = "none";
 });
 input.addEventListener("keydown", (event) => {
+    const panel = document.getElementById("panel");
+    panel.classList.add("card");
+    panel.innerHTML = `${event.code}`;
     if (event.code === "Enter") {
         click();
     }
