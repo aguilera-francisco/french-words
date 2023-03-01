@@ -1,18 +1,15 @@
+require("dotenv").config();
 const express = require("express");
 const wr = require("wordreference-api");
 const path = require("path");
-const cors = require("cors");
+
 const {
     refactorWord,
     wordHasAccent,
 } = require("./src/controllers/info.helper");
 const InfoRouter = require("./src/routes/info.router");
 const app = express();
-// app.use(
-//     cors({
-//         origin: "Access-Control-Allow-Origin",
-//     })
-// );
+
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "src", "public")));
 app.get("/", (req, res) => {
@@ -38,7 +35,7 @@ app.get("/word/:word", async (req, res) => {
         res.send(err);
     }
 });
-const PORT = 443;
+const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
     console.log(`Servidor funcionando en puerto: ${PORT}`);
 });
