@@ -1,9 +1,9 @@
 //require("dotenv").config();
 const btnBuscar = document.getElementById("btnBuscar");
 const btnEliminar = document.getElementById("btnEliminar");
+const input = document.getElementById("input");
 
 btnEliminar.style.display = "none";
-const input = document.getElementById("input");
 const URL = `/info`;
 function buildMeanings(meanings) {
     let textHtml = "";
@@ -12,9 +12,9 @@ function buildMeanings(meanings) {
     }
     return textHtml;
 }
-function showError() {
+function showError(word) {
     const panel = document.getElementById("panel");
-    panel.innerHTML = `<h3>Palabra No Encontrada</h3>
+    panel.innerHTML = `<h3>No se encontró: ${word}</h3>
         <label><em>Prueba Con Otra</em></label>
         <hr>
         <h5>Toma en cuenta:</h5>
@@ -29,7 +29,7 @@ function showError() {
 function buildCard(card) {
     const txtHtml = buildMeanings(card.meanings);
     const panel = document.getElementById("panel");
-    panel.innerHTML = `<h3>${word}</h3>
+    panel.innerHTML = `<h3>${card.word}</h3>
         <label><em>${card.fromType}</em></label>
         <hr>
         <h5>Significados</h5>
@@ -40,45 +40,50 @@ function buildCard(card) {
     panel.classList.add("mt-3");
     btnEliminar.style.display = "";
 }
-
-async function click() {
-    const word = document.getElementById("input").value.toLowerCase();
-    if (word != "") {
-        console.log("antes del fetch");
-        const panel = document.getElementById("panel");
-        panel.innerHTML = `<h6>Buscando... </h6>`;
-        const response = await fetch(`${URL}/${word}`);
-        console.log(response);
-        const result = await response.json();
-        console.log(result);
-        if (result.ok) {
-            const card = result.result;
-            console.log(card);
-            buildCard(card);
-        } else {
-            showError();
-        }
-    }
-}
-btnBuscar.addEventListener("click", () => {
-    click();
-});
-
-btnEliminar.addEventListener("click", () => {
-    const input = document.getElementById("input");
-    input.value = "";
+function clean() {
     const panel = document.getElementById("panel");
     panel.innerHTML = ``;
     panel.classList.remove("card");
     panel.classList.remove("pt-2");
     btnEliminar.style.display = "none";
+}
+async function click() {
+    const word = document.getElementById("input").value.toLowerCase();
+    if (word != "") {
+        //console.log("antes del fetch");
+        const panel = document.getElementById("panel");
+        panel.classList.add("card");
+        panel.innerHTML = `<h6>Buscando... </h6>`;
+        const response = await fetch(`${URL}/${word}`);
+        //console.log(response);
+        const result = await response.json();
+        console.log("RESPUESTA", response);
+        console.log("RESULTADO", result);
+        if (result.result) {
+            console.log("ENTRÓ AL IF DE PRUEBA");
+            const card = result.result;
+            buildCard(card);
+        } else {
+            console.log("NO ENTRÓ AL IF DE PRUEBA");
+            showError(input.value);
+        }
+    }
+}
+input.addEventListener("input", () => {
+    if (input.value === "") {
+        clean();
+    }
+});
+btnBuscar.addEventListener("click", () => {
+    click();
+});
+
+btnEliminar.addEventListener("click", () => {
+    input.value = "";
+    clean();
 });
 input.addEventListener("keydown", (event) => {
-    const panel = document.getElementById("panel");
-    panel.classList.add("card");
-    panel.innerHTML = `<p>${event.key}</p>`;
     if (event.code === "Enter") {
         click();
     }
 });
-//evento cuando el texto del input esté vacío

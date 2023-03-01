@@ -23,6 +23,9 @@ body {
     padding: 20px;
     padding-top: 10px;
 }
+#btnEliminar {
+    font-weight: bold;
+}
 /* .button {
     margin: 10px;
 } */
