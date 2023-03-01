@@ -4,7 +4,7 @@ const btnEliminar = document.getElementById("btnEliminar");
 
 btnEliminar.style.display = "none";
 const input = document.getElementById("input");
-const URL = `https://localhost:10000/info`;
+const URL = `/info`;
 //const URL = `https://french-words.onrender.com/info`;
 function buildMeanings(meanings) {
     let textHtml = "";
