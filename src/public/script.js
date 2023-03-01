@@ -45,6 +45,8 @@ async function click() {
     const word = document.getElementById("input").value.toLowerCase();
     if (word != "") {
         console.log("antes del fetch");
+        const panel = document.getElementById("panel");
+        panel.innerHTML = `<h6>Buscando... </h6>`;
         const response = await fetch(`${URL}/${word}`);
         console.log(response);
         const result = await response.json();
@@ -74,7 +76,7 @@ btnEliminar.addEventListener("click", () => {
 input.addEventListener("keydown", (event) => {
     const panel = document.getElementById("panel");
     panel.classList.add("card");
-    panel.innerHTML = `${event.code}`;
+    panel.innerHTML = `<p>${event.code}</p>`;
     if (event.code === "Enter") {
         click();
     }
