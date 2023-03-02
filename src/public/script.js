@@ -22,7 +22,6 @@ function showError(word) {
         <p>Si tiene acentos</p>
         `;
     panel.classList.add("card");
-    panel.classList.add("pt-2");
     panel.classList.add("mt-3");
     btnEliminar.style.display = "";
 }
@@ -36,7 +35,6 @@ function buildCard(card) {
         ${txtHtml}
         `;
     panel.classList.add("card");
-    panel.classList.add("pt-2");
     panel.classList.add("mt-3");
     btnEliminar.style.display = "";
 }
@@ -44,7 +42,7 @@ function clean() {
     const panel = document.getElementById("panel");
     panel.innerHTML = ``;
     panel.classList.remove("card");
-    panel.classList.remove("pt-2");
+
     btnEliminar.style.display = "none";
 }
 async function click() {

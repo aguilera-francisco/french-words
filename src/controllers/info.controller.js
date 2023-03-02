@@ -2,7 +2,7 @@ const { wordHasAccent, refactorWord } = require("./info.helper");
 const wr = require("wordreference-api");
 const { translateType } = require("../services/info.services");
 
-function findGender(word, translations) {
+function findWord(word, translations) {
     for (trans of translations) {
         const transWord = trans.from.toLowerCase();
         if (transWord !== word) {
@@ -38,7 +38,6 @@ function findAlternativeResult(word, translations) {
 function findAlikeResult(word, translations) {
     for (trans of translations) {
         const transWord = refactorWord(trans.from);
-        console.log("alike transformado", transWord);
         if (!(transWord.includes(word) || transWord === word)) {
             continue;
         }
@@ -61,7 +60,7 @@ function getAllMeanings(word, translations) {
         }
         for (trans of translation.translations) {
             const transWord = trans.from.toLowerCase();
-            if (transWord === word) {
+            if (transWord === word.toLowerCase()) {
                 meaningsArray.push({
                     meaning: trans.to,
                     type: trans.toType,
@@ -72,23 +71,6 @@ function getAllMeanings(word, translations) {
     return meaningsArray;
 }
 function getAllAlternativeMeanings(word, translations) {
-    const meaningsArray = [];
-    for (translation of translations) {
-        if (translation.title !== "Principales traductions") {
-            continue;
-        }
-        for (trans of translation.translations) {
-            if (trans.from.includes(word)) {
-                meaningsArray.push({
-                    meaning: trans.to,
-                    type: trans.toType,
-                });
-            }
-        }
-    }
-    return meaningsArray;
-}
-function getAllAlikeMeanings(word, translations) {
     const meaningsArray = [];
     for (translation of translations) {
         if (translation.title !== "Principales traductions") {
@@ -116,13 +98,48 @@ function deleteDuplicated(array) {
     });
     return filteredArray;
 }
+function buildResponse(word, result, data, flags, fillMeanings) {
+    let meanings = [];
+    meanings = fillMeanings(word, data.translations);
+    meanings = deleteDuplicated(meanings);
+    result.meanings = meanings;
+    result.ok = flags[0];
+    result.alternative = flags[1];
+    result.alike = flags[2];
+    result = translateType(result);
+    return result;
+}
+function getResult(word, data, flags, findResult, getMeanings) {
+    let result = {};
+    for (translation of data.translations) {
+        if (translation.title !== "Principales traductions") {
+            continue;
+        }
+        //buscar el género
+        const exact = findResult(word, translation.translations);
+        if (!exact) {
+            continue;
+        } else {
+            result = exact;
+            break;
+        }
+    }
 
+    if (result.word) {
+        result = buildResponse(result.word, result, data, flags, getMeanings);
+        return result;
+    }
+    result.ok = false;
+    return result;
+}
+//función para borrar => de los verbos
 async function httpGetWord(req, res) {
     let word = req.params.word;
     if (wordHasAccent(word)) {
         word = refactorWord(word);
     }
     try {
+        //hacer la petición a la api
         const data = await wr(word, "fr", "es");
         word = req.params.word;
         if (!data.translations) {
@@ -130,99 +147,44 @@ async function httpGetWord(req, res) {
                 error: "no hay traducciones",
             };
         }
-        let result = {};
-        let meanings = [];
-        //pasar a otra función
-        for (translation of data.translations) {
-            if (translation.title !== "Principales traductions") {
-                continue;
-            }
-            //buscar el género
-            const gender = findGender(word, translation.translations);
-            if (!gender) {
-                continue;
-            } else {
-                result = gender;
-                break;
-            }
+        /*=============================================
+        INTENTA BUSCAR LA PALABRA EXACTA
+        =============================================*/
+        let result = getResult(
+            word,
+            data,
+            [true, false, false],
+            findWord,
+            getAllMeanings
+        );
+        if (result.ok) {
+            return res.send({ result });
         }
-        if (result.word) {
-            //sacar todos los resultados
-            meanings = getAllMeanings(word, data.translations);
-            meanings = deleteDuplicated(meanings);
-            //añadir al result
-            //crear función para construir los result
-            result.meanings = meanings;
-            result.ok = true;
-            result.alternative = false;
-            result.alike = false;
-            result = translateType(result);
-            return res.send({
-                result,
-            });
+        /*=============================================
+        BUSCA UN RESULTADO QUE CONTENGA LA PALABRA
+        =============================================*/
+        result = getResult(
+            word,
+            data,
+            [true, true, false],
+            findAlternativeResult,
+            getAllAlternativeMeanings
+        );
+        if (result.ok) {
+            return res.send({ result });
         }
-        //aquí no encontó la palabra exactamente,
-        //procede a buscar si hay algún resultado que contenga la palabra
-        for (translation of data.translations) {
-            if (translation.title !== "Principales traductions") {
-                continue;
-            }
-            //buscar el género
-            const alternative = findAlternativeResult(
-                word,
-                translation.translations
-            );
-            if (!alternative) {
-                continue;
-            } else {
-                result = alternative;
-                break;
-            }
-        }
-        if (result.word) {
-            //sacar todos los resultados
-            meanings = getAllAlternativeMeanings(word, data.translations);
-            meanings = deleteDuplicated(meanings);
-            //añadir al result
-            result.meanings = meanings;
-            result.ok = true;
-            result.alternative = true;
-            result.alike = false;
-            result = translateType(result);
-            return res.send({
-                result,
-            });
-        }
-        //si no encuentra de plano nada, recorrer los resultados quitándole los acentos
-        for (translation of data.translations) {
-            if (translation.title !== "Principales traductions") {
-                continue;
-            }
-            //buscar el género
-            const alike = findAlikeResult(word, translation.translations);
-            if (!alike) {
-                continue;
-            } else {
-                result = alike;
-                break;
-            }
-        }
-        if (result.word) {
-            //sacar todos los resultados
-            meanings = getAllAlternativeMeanings(
-                result.word,
-                data.translations
-            );
-            meanings = deleteDuplicated(meanings);
-            //añadir al result
-            result.meanings = meanings;
-            result.ok = true;
-            result.alternative = false;
-            result.alike = true;
-            result = translateType(result);
-            return res.send({
-                result,
-            });
+        /*=============================================
+        BUSCA UN RESULTADO QUE SE PAREZCA
+        =============================================*/
+        result = getResult(
+            word,
+            data,
+            [true, false, true],
+            findAlikeResult,
+            getAllAlternativeMeanings
+        );
+        if (result.ok) {
+            return res.send({ result });
         }
         /*=============================================
         NO ENCONTRÓ NADA
