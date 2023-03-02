@@ -29,10 +29,10 @@ function showError(word) {
 function buildCard(card) {
     const txtHtml = buildMeanings(card.meanings);
     const panel = document.getElementById("panel");
-    panel.innerHTML = `<h3>${card.word}</h3>
+    panel.innerHTML = `<h3><strong>${card.word}</strong></h3>
         <label><em>${card.fromType}</em></label>
         <hr>
-        <h5>Significados</h5>
+        <h5><strong>Significados</strong></h5>
         ${txtHtml}
         `;
     panel.classList.add("card");
@@ -60,27 +60,28 @@ async function click() {
         console.log("RESPUESTA", response);
         console.log("RESULTADO", result);
         if (result.result) {
-            console.log("ENTRÓ AL IF DE PRUEBA");
             const card = result.result;
             buildCard(card);
         } else {
-            console.log("NO ENTRÓ AL IF DE PRUEBA");
             showError(input.value);
         }
     }
 }
 input.addEventListener("input", () => {
+    btnEliminar.style.display = "";
     if (input.value === "") {
         clean();
     }
 });
 btnBuscar.addEventListener("click", () => {
     click();
+    input.focus();
 });
 
 btnEliminar.addEventListener("click", () => {
     input.value = "";
     clean();
+    input.focus();
 });
 input.addEventListener("keydown", (event) => {
     if (event.code === "Enter") {

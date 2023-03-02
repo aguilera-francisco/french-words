@@ -3,6 +3,7 @@ body {
     background-color: #28036a !important;
     color: white;
     padding-top: 5%;
+    font-family: "Shantell Sans";
     /* display: flex;
     align-items: center;
     justify-content: center;
@@ -15,16 +16,34 @@ body {
     margin-bottom: 5px;
 }
 /* #input {
-    margin-bottom: 5px;
+    padding-right: 30px;
 } */
 #panel {
     margin-top: 5px;
     color: black;
     padding: 20px;
-    padding-top: 10px;
+    /* padding-top: 10px; */
 }
 #btnEliminar {
+    text-align: left !important;
+    padding-left: 0px;
+    padding-right: 15px;
     font-weight: bold;
+    /* background-color: rgb(139, 139, 139); */
+    background-color: white;
+    color: black;
+}
+#btnBuscar {
+    padding: 3px 18px;
+}
+input:focus,
+input.form-control:focus {
+    border-color: rgb(255, 255, 255);
+    outline: none !important;
+    outline-width: 0 !important;
+    box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    -webkit-box-shadow: none !important;
 }
 /* .button {
     margin: 10px;
