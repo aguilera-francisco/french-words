@@ -50,13 +50,14 @@ function clean() {
 async function click() {
     const word = document.getElementById("input").value.toLowerCase();
     if (word != "") {
-        //console.log("antes del fetch");
+        //mejorar esto y pasar a una función
         const panel = document.getElementById("panel");
         panel.classList.add("card");
         panel.innerHTML = `<h6>Buscando... </h6>`;
         const response = await fetch(`${URL}/${word}`);
-        //console.log(response);
         const result = await response.json();
+        //primero consultar si result
+        //tuvo un alternativo
         if (result.result) {
             const card = result.result;
             buildCard(card);
