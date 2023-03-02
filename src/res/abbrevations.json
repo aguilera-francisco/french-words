@@ -16,6 +16,7 @@
     "loc": "Frase",
     "loc adj": "Frase adjetiva",
     "loc adv": "Frase adverbial",
+    "loc interj": "Frase Interjectiva",
     "n": "Sustantivo",
     "nf": "Sust. Fem.",
     "nf inv": "Sust. Fem. In.",
@@ -44,5 +45,6 @@
     "vi": "Verbo Intr.",
     "vtr": "Verbo Trans",
     "vtr ind": "V. Transitivo Indirecto",
-    "v expr/loc v": "Expr. Verbal"
+    "v expr/loc v": "Expr. Verbal",
+    "nm, nf": "Masc, Fem."
 }

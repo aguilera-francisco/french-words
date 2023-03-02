@@ -57,8 +57,6 @@ async function click() {
         const response = await fetch(`${URL}/${word}`);
         //console.log(response);
         const result = await response.json();
-        console.log("RESPUESTA", response);
-        console.log("RESULTADO", result);
         if (result.result) {
             const card = result.result;
             buildCard(card);
